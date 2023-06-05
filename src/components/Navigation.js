@@ -5,6 +5,7 @@ import { NavigationContainer, StackActions }
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import Recipes from '../pages/Recipes'
+import newRecipe from '../pages/newRecipe'
 
 const Stack = createNativeStackNavigator()
 function AppStack() {
@@ -22,6 +23,10 @@ function AppStack() {
                 name="Recipes"
                 options={{ headerShown: false }}
                 component={Recipes} />
+            <Stack.Screen
+                name="NewRecipe"
+                options={{ headerShown: false }}
+                component={newRecipe} />
         </Stack.Navigator>
     )
 }

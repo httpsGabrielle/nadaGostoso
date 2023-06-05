@@ -1,20 +1,40 @@
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { getRecipes } from '../services/api';
 import Header from '../components/Header';
 
 export default function Recipes() {
     const navigation = useNavigation()
+    const {recipeList, setRecipeList} = useState([])
+
+    useEffect(() => {
+        const fetchRecipes = async () => {
+          try {
+            const recipes = await getRecipes()
+            setRecipeList(recipes)
+          } catch (error) {
+            console.log(error)
+          }
+          setLoading(false)
+        }
+    
+        fetchRecipes()
+      }, [])
 
     return (
         <View style={styles.body}>
             <Header/>
             <View style={styles.container}>
-                <View style={styles.containerfood}>
-                    <Image style={styles.img} source={require('../../assets/food.jpg')}/>
-                    <View>
-                        <Text style={styles.title}>Food</Text>
+                {recipeList.map((recipe) => (
+                    <View style={styles.containerfood}>
+                        <Image style={styles.img} source={require('../../assets/food.jpg')}/>
+                        <View>
+                            <Text style={styles.title}>{recipe.name}</Text>
+                        </View>
                     </View>
-                </View>
+                ))}
+                
                 <TouchableOpacity style={styles.btn}>
                     <Image style={styles.icons} source={require('../../assets/plus.png')}/>
                 </TouchableOpacity>
