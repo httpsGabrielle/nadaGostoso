@@ -9,8 +9,11 @@ export default function Recipes() {
         <View style={styles.body}>
             <Header/>
             <View style={styles.container}>
-                <View>
-                    
+                <View style={styles.containerfood}>
+                    <Image style={styles.img} source={require('../../assets/food.jpg')}/>
+                    <View>
+                        <Text style={styles.title}>Food</Text>
+                    </View>
                 </View>
                 <TouchableOpacity style={styles.btn}>
                     <Image style={styles.icons} source={require('../../assets/plus.png')}/>
@@ -26,10 +29,7 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 34
+        flex: 1
     }, 
     btn:{
         position: 'absolute',
@@ -46,5 +46,24 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         resizeMode: 'contain'
+    },
+    img:{
+        width: 60,
+        height: 60,
+        borderRadius: 6,
+        marginRight: 16
+    },
+    containerfood:{
+        borderBottomColor: "#E5E5E5",
+        borderBottomWidth: 1,
+        width: '100%',
+        padding: 16,
+        flex: 1,
+        flexDirection: 'row'
+    },
+    title:{
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#136788'
     }
 });
