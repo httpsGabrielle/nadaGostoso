@@ -26,7 +26,7 @@ export default function Recipes() {
         <View style={styles.body}>
             <Header/>
             <View style={styles.container}>
-                {recipeList.map((recipe) => (
+                {recipeList?.map((recipe, index) => (
                     <View style={styles.containerfood}>
                         <Image style={styles.img} source={require('../../assets/food.jpg')}/>
                         <View>
@@ -34,8 +34,7 @@ export default function Recipes() {
                         </View>
                     </View>
                 ))}
-                
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('addRecipe')}>
                     <Image style={styles.icons} source={require('../../assets/plus.png')}/>
                 </TouchableOpacity>
             </View>

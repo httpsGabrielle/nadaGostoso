@@ -17,7 +17,7 @@ export default function SignIn() {
                     <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('Recipes')}>
                         <Text style={styles.btntext}>Login</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>navigation.navigate('NewRecipe')}>
+                    <TouchableOpacity onPress={()=>navigation.navigate('SignUp')}>
                         <Text style={styles.btntextlight}>Não possui uma conta? Cadastre-se</Text>
                     </TouchableOpacity>
                 </View>    

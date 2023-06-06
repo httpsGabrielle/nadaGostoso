@@ -1,27 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { getRecipes } from '../services/api';
+import { addRecipe } from '../services/api';
 import Header from '../components/Header';
 
 export default function Recipes() {
     const navigation = useNavigation()
     const {recipeList, setRecipeList} = useState([])
     const {recipeName, setRecipeName} = useState('')
+    const {tutorialRecipe, setTutorialRecipe} = useState('')
+    const [ingredients, setIngredients] = useState([]);
+    const [ingredientType, setIngredientType] = useState('');
+    const [ingredientQuantity, setIngredientQuantity] = useState('');
+    const [ingredientUnit, setIngredientUnit] = useState('');
+  
+    const handleIngredientSubmit = () => {
+      if (ingredientType !== '' && ingredientQuantity !== '' && ingredientUnit !== '') {
+        const newIngredient = {
+          type: ingredientType,
+          quantity: ingredientQuantity,
+          unit: ingredientUnit
+        };
+        setIngredients([...ingredients, newIngredient]);
+        setIngredientType('');
+        setIngredientQuantity('');
+        setIngredientUnit('');
+      }
+    };
 
-    useEffect(() => {
-        const fetchRecipes = async () => {
-          try {
-            const recipes = await getRecipes()
-            setRecipeList(recipes)
-          } catch (error) {
-            console.log(error)
-          }
-          setLoading(false)
-        }
+    const handleNewRecipe = async () => {
+        const recipeData = {
+          title: recipeName,
+          ingredients: ingredients
+        };
     
-        fetchRecipes()
-      }, [])
+        try {
+            const response = await addRecipe(recipeData);
+            console.log('Receita adicionada com sucesso:', response);
+            // Lógica adicional após a adição bem-sucedida da receita
+        } catch (error) {
+            console.error('Erro ao adicionar a receita:', error.message);
+            // Lógica adicional para tratar o erro
+        }
+      };
 
     return (
         <View style={styles.body}>
@@ -31,26 +52,42 @@ export default function Recipes() {
                 <TextInput
                     onChangeText={setRecipeName}
                     value={recipeName}
-                    style={styles.textInput}/>
-                <Text>Ingredientes</Text>
-                <View style={styles.inputgroup}>
+                    style={styles.input}/>
+                <Text style={styles.subtitle}>Ingredientes:</Text>
+                {ingredients.map((ingredient, index) => (
+                    <Text key={index} style={styles.ingredient}>
+                    {ingredient.type} - {ingredient.quantity} {ingredient.unit}
+                    </Text>
+                ))}
+                <View style={styles.ingredientContainer}>
                     <TextInput
-                    onChangeText={setRecipeName}
-                    value={recipeName}
-                    style={styles.textInputfirst}/>
+                    style={styles.inputInline}
+                    placeholder="Tipo"
+                    onChangeText={(text) => setIngredientType(text)}
+                    value={ingredientType}
+                    />
                     <TextInput
-                    onChangeText={setRecipeName}
-                    value={recipeName}
-                    style={styles.textInputsecond}/>
+                    style={styles.inputInline}
+                    placeholder="Quantidade"
+                    onChangeText={(text) => setIngredientQuantity(text)}
+                    value={ingredientQuantity}
+                    />
                     <TextInput
-                    onChangeText={setRecipeName}
-                    value={recipeName}
-                    style={styles.textInputthrid}/>
-                </View>
-                <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('Recipes')}>
-                    <Text style={styles.btntext}>+ Adicionar Ingredientes</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('Recipes')}>
+                    style={styles.inputInline}
+                    placeholder="Unidade"
+                    onChangeText={(text) => setIngredientUnit(text)}
+                    value={ingredientUnit}
+                    />
+                </View>    
+                <TouchableOpacity style={styles.btn} onPress={handleIngredientSubmit}>
+                    <Text style={styles.btntext}>+ Adicionar Ingrediente</Text>
+                </TouchableOpacity>       
+                <Text>Modo de fazer</Text>
+                <TextInput
+                    onChangeText={setTutorialRecipe}
+                    value={tutorialRecipe}
+                    style={styles.textarea}/>
+                <TouchableOpacity style={styles.btn} onPress={()=>handleNewRecipe()}>
                     <Text style={styles.btntext}>Postar</Text>
                 </TouchableOpacity>
             </View>    
@@ -61,10 +98,8 @@ export default function Recipes() {
 const styles = StyleSheet.create({
     body: {
         width: '100%',
-        height: '100%'
     },
     container: {
-        flex: 1,
         padding: 34
     },
     btn: {
@@ -83,39 +118,76 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 32,
         padding: 4,
-        borderBottomColor: 'black',
-        borderBottomWidth: 1
+        borderColor: '#C0C0C0',
+        borderWidth: 1
     },
     inputgroup:{
         flex: 1,
         flexDirection: 'row',
-        gap: 16    
+        gap: 16
     },
-    textInputfirst: {
-        backgroundColor: '#fbfbfb',
-        borderRadius: 4,
-        width: '60%',
-        height: 32,
-        padding: 4,
-        borderBottomColor: 'black',
-        borderBottomWidth: 1
+    textarea:{
+        width: '100%',
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 8,
+        marginBottom: 16,
+        paddingHorizontal: 12,
     },
-    textInputsecond: {
-        backgroundColor: '#fbfbfb',
-        borderRadius: 4,
-        width: '10%',
-        height: 32,
-        padding: 4,
-        borderBottomColor: 'black',
-        borderBottomWidth: 1
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 16,
     },
-    textInputthrid: {
-        backgroundColor: '#fbfbfb',
-        borderRadius: 4,
-        width: '20%',
-        height: 32,
-        padding: 4,
-        borderBottomColor: 'black',
-        borderBottomWidth: 1
+    input: {
+        width: '100%',
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 8,
+        marginBottom: 16,
+        paddingHorizontal: 12,
     },
+    subtitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 8,
+      marginTop: 16,
+    },
+    ingredientContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 16,
+    },
+    ingredient: {
+      fontSize: 16,
+      marginBottom: 4,
+    },
+    inputInline: {
+      flex: 1,
+      height: 40,
+      borderColor: 'gray',
+      borderWidth: 1,
+      borderRadius: 8,
+      marginRight: 8,
+      paddingHorizontal: 12,
+    },
+    addButton: {
+      backgroundColor: 'blue',
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderRadius: 8,
+    },
+    submitButton: {
+      backgroundColor: 'green',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 8,
+    },
+    buttonText: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: 'bold',
+    }
 });

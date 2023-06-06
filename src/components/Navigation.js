@@ -24,7 +24,7 @@ function AppStack() {
                 options={{ headerShown: false }}
                 component={Recipes} />
             <Stack.Screen
-                name="NewRecipe"
+                name="addRecipe"
                 options={{ headerShown: false }}
                 component={newRecipe} />
         </Stack.Navigator>
