@@ -6,7 +6,7 @@ import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import Recipes from '../pages/Recipes'
 import newRecipe from '../pages/newRecipe'
-
+import ViewRecipe from '../pages/ViewRecipe'
 const Stack = createNativeStackNavigator()
 function AppStack() {
     return (
@@ -27,6 +27,10 @@ function AppStack() {
                 name="addRecipe"
                 options={{ headerShown: false }}
                 component={newRecipe} />
+            <Stack.Screen
+                name="View"
+                options={{ headerShown: false }}
+                component={ViewRecipe} />
         </Stack.Navigator>
     )
 }

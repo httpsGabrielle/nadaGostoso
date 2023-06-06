@@ -27,14 +27,14 @@ export default function Recipes() {
             <Header/>
             <View style={styles.container}>
                 {recipeList?.map((recipe, index) => (
-                    <View style={styles.containerfood}>
+                    <TouchableOpacity style={styles.containerfood} onPress={()=>navigation.navigate('View')}>
                         <Image style={styles.img} source={require('../../assets/food.jpg')}/>
                         <View>
                             <Text style={styles.title}>{recipe.name}</Text>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 ))}
-                <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('addRecipe')}>
+                <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('View', teste)}>
                     <Image style={styles.icons} source={require('../../assets/plus.png')}/>
                 </TouchableOpacity>
             </View>
