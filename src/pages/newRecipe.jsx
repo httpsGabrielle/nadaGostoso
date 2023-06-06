@@ -30,8 +30,10 @@ export default function Recipes() {
 
     const handleNewRecipe = async () => {
         const recipeData = {
-          title: recipeName,
-          ingredients: ingredients
+            name: recipeName,
+            ingredients: ingredients,
+            instructions: tutorialRecipe,
+            author:'gabe'
         };
     
         try {
