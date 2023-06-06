@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,12 +8,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker'
-import * as SecureStore from "expo-secure-store";
 
 import { addRecipe } from "../services/api";
 import Header from "../components/Header";
+import { AuthContext } from "../contexts/AuthContext";
 
-export default function NewRecipe() {
+const NewRecipe = () => {
   const [recipeName, setRecipeName] = useState("");
   const [tutorialRecipe, setTutorialRecipe] = useState("");
   const [ingredients, setIngredients] = useState([]);
@@ -23,6 +23,7 @@ export default function NewRecipe() {
   const [image, setImage] = useState(null)
 
   const navigation = useNavigation();
+  const { user } = useContext(AuthContext)
 
   const handleIngredientSubmit = () => {
     if (ingredientName && ingredientQuantity && ingredientUnit) {
@@ -46,9 +47,6 @@ export default function NewRecipe() {
       image_base64: image,
       instructions: tutorialRecipe,
     };
-
-    const userJson = await SecureStore.getItemAsync("nada_gostoso_token");
-    const user = JSON.parse(userJson)
 
     try {
       const response = await addRecipe(recipeData, user.token);
@@ -74,82 +72,81 @@ export default function NewRecipe() {
   }
 
   return (
-    <View style={styles.body}>
+    <View style={styles.container}>
       <Header />
-      <View style={styles.container}>
-        <Text>Nome da Receita</Text>
-        <TextInput
-            style={styles.input}
-            placeholder="Nome da receita"
-            onChangeText={setRecipeName}
-            value={recipeName}
-          />
-        <Text style={styles.subtitle}>
-          Ingredientes:
-        </Text>
-        {ingredients.map((ingredient, index) => (
-          <Text
-            key={index} 
-            style={styles.ingredient}
-          >
-            {ingredient.name} - {ingredient.quantity} {ingredient.unit}
-          </Text>
-        ))}
-        <View style={styles.ingredientContainer}>
-          <TextInput
-            style={styles.inputInline}
-            placeholder="Nome"
-            onChangeText={setIngredientName}
-            value={ingredientName}
-          />
-          <TextInput
-            style={styles.inputInline}
-            placeholder="Quantidade"
-            onChangeText={setIngredientQuantity}
-            value={ingredientQuantity}
-          />
-          <TextInput
-            style={styles.inputInline}
-            placeholder="Unidade"
-            onChangeText={setIngredientUnit}
-            value={ingredientUnit}
-          />
-        </View>
-        <TouchableOpacity 
-          style={styles.btn} 
-          onPress={handleIngredientSubmit}
-        >
-          <Text style={styles.btntext}>+ Adicionar Ingrediente</Text>
-        </TouchableOpacity>
-        <Text>Modo de fazer</Text>
-        <TextInput
-          onChangeText={setTutorialRecipe}
-          value={tutorialRecipe}
-          style={styles.textarea}
+      <Text>Nome da Receita</Text>
+      <TextInput
+          style={styles.input}
+          placeholder="Nome da receita"
+          onChangeText={setRecipeName}
+          value={recipeName}
         />
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={pickImage}
+      <Text style={styles.subtitle}>
+        Ingredientes:
+      </Text>
+      {ingredients.map((ingredient, index) => (
+        <Text
+          key={index} 
+          style={styles.ingredient}
         >
-          <Text style={styles.btntext}>Imagem</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btn} 
-          onPress={handleNewRecipe}
-        >
-          <Text style={styles.btntext}>Postar</Text>
-        </TouchableOpacity>
+          {ingredient.name} - {ingredient.quantity} {ingredient.unit}
+        </Text>
+      ))}
+      <View style={styles.ingredientContainer}>
+        <TextInput
+          style={styles.inputInline}
+          placeholder="Nome"
+          onChangeText={setIngredientName}
+          value={ingredientName}
+        />
+        <TextInput
+          style={styles.inputInline}
+          placeholder="Quantidade"
+          onChangeText={setIngredientQuantity}
+          value={ingredientQuantity}
+        />
+        <TextInput
+          style={styles.inputInline}
+          placeholder="Unidade"
+          onChangeText={setIngredientUnit}
+          value={ingredientUnit}
+        />
       </View>
+      <TouchableOpacity 
+        style={styles.btn} 
+        onPress={handleIngredientSubmit}
+      >
+        <Text style={styles.btntext}>+ Adicionar Ingrediente</Text>
+      </TouchableOpacity>
+      <Text>Modo de fazer</Text>
+      <TextInput
+        onChangeText={setTutorialRecipe}
+        value={tutorialRecipe}
+        style={styles.textarea}
+      />
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={pickImage}
+      >
+        <Text style={styles.btntext}>Imagem</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btn} 
+        onPress={handleNewRecipe}
+      >
+        <Text style={styles.btntext}>Postar</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
+export default NewRecipe
+
 const styles = StyleSheet.create({
-  body: {
-    width: "100%",
-  },
   container: {
-    padding: 34,
+    flex: 1,
+    width: '100%',
+    padding: 32
   },
   btn: {
     backgroundColor: "#136788",

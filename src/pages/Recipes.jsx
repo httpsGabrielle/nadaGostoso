@@ -1,20 +1,26 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { useState, useCallback, useContext } from "react";
+import { StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import * as SecureStore from "expo-secure-store";
+import { MaterialIcons } from '@expo/vector-icons'; 
+
 import { getRecipes } from "../services/api";
+import { AuthContext } from "../contexts/AuthContext";
+
+import { colors } from "../themes";
+
 import Header from "../components/Header";
+import RecipeCard from "../components/RecipeCard";
 
-export default function Recipes() {
+const Recipes = () => {
   const [recipeList, setRecipeList] = useState([]);
+  const [loading, setLoading] = useState()
 
+  const { user } = useContext(AuthContext)
   const navigation = useNavigation();
 
   useFocusEffect(
-    React.useCallback(() => {
-      const fetchRecipes = async () => {
-        const token = await SecureStore.getItemAsync('nada_gostoso_token')
-
+    useCallback(() => {
+      const fetchRecipes = async (token) => {
         try {
           const recipes = await getRecipes(token)
           setRecipeList(recipes)
@@ -23,84 +29,55 @@ export default function Recipes() {
         }
       }
 
-      fetchRecipes()
+      fetchRecipes(user.token)
     }, [])
   )
 
   return (
-    <View style={styles.body}>
+    <>
       <Header />
       <View style={styles.container}>
-        {recipeList?.map((recipe) => (
-          <TouchableOpacity
-            key={recipe.id}
-            style={styles.containerfood}
-            onPress={() => navigation.navigate("View", recipe)}
-          >
-            <Image
-              style={styles.img}
-              source={{ uri: 'data:image/jpeg;base64,' + recipe.image_base64 }}
+        <FlatList 
+          data={recipeList}
+          renderItem={({ item }) => (
+            <RecipeCard
+              key={item.id}
+              handlePress={() => navigation.navigate('View', item)}
+              name={item.name}
+              author={item.author.username}
+              image={item.image_base64}
             />
-            <View>
-              <Text style={styles.title}>{recipe.name}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+          )}
+        />
         <TouchableOpacity
-          style={styles.btn}
+          style={styles.addBtn}
           onPress={() => navigation.navigate("addRecipe")}
         >
-          <Image
-            style={styles.icons}
-            source={require("../../assets/plus.png")}
-          />
+          <MaterialIcons name="add" size={32} color="white" />
         </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 }
 
+export default Recipes
+
 const styles = StyleSheet.create({
-  body: {
-    width: "100%",
-    height: "100%",
-  },
   container: {
     flex: 1,
+    width: '100%',
+    position: 'relative'
   },
-  btn: {
-    position: "absolute",
-    backgroundColor: "#136788",
-    justifyContent: "center",
-    alignItems: "center",
-    width: 50,
-    height: 50,
+  addBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 64,
+    width: 64,
+    backgroundColor: colors.primary,
     borderRadius: 100,
-    right: 30,
-    bottom: 50,
-  },
-  icons: {
-    width: 24,
-    height: 24,
-    resizeMode: "contain",
-  },
-  img: {
-    width: 60,
-    height: 60,
-    borderRadius: 6,
-    marginRight: 16,
-  },
-  containerfood: {
-    borderBottomColor: "#E5E5E5",
-    borderBottomWidth: 1,
-    width: "100%",
-    padding: 16,
-    flex: 1,
-    flexDirection: "row",
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#136788",
-  },
+    position: 'absolute',
+    bottom: 32,
+    right: 24
+  }
 });

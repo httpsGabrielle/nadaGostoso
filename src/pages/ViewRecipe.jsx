@@ -13,7 +13,7 @@ const ViewRecipe = ({ route }) => {
 
   return (
     <View style={styles.body}>
-      <Header icon="arrow" />
+      <Header />
       <Image
         style={styles.header}
         source={{
@@ -39,6 +39,8 @@ const ViewRecipe = ({ route }) => {
     </View>
   );
 };
+
+export default ViewRecipe
 
 const styles = StyleSheet.create({
   body: {
@@ -66,5 +68,3 @@ const styles = StyleSheet.create({
     textAlign: "justify",
   },
 });
-
-export default ViewRecipe;

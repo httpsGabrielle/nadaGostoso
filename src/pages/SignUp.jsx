@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { AuthContext } from "../contexts/authContext";
+import { AuthContext } from "../contexts/AuthContext";
 
-export default function SignUp() {
+const SignUp = () => {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -20,11 +20,7 @@ export default function SignUp() {
 
   const handleSignup = async () => {
     try {
-      const user = await signup({ username, name, password });
-      
-      if (user) {
-        navigation.navigate('Recipes')
-      }
+      await signup({ username, name, password });
     } catch (err) {
       console.log(err);
     }
@@ -60,6 +56,8 @@ export default function SignUp() {
     </View>
   );
 }
+
+export default SignUp
 
 const styles = StyleSheet.create({
   body: {
