@@ -31,9 +31,9 @@ export default function Recipes() {
     <View style={styles.body}>
       <Header />
       <View style={styles.container}>
-        {recipeList?.map((recipe, index) => (
+        {recipeList?.map((recipe) => (
           <TouchableOpacity
-            key={index}
+            key={recipe.id}
             style={styles.containerfood}
             onPress={() => navigation.navigate("View", recipe)}
           >
