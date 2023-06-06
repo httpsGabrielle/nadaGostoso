@@ -6,7 +6,6 @@ import Header from '../components/Header';
 const ViewRecipe = (props) => {
     const navigation = useNavigation()  
     const {name, ingredients, tutorial} = props
-    
     return (
         <View style={styles.body}>
             <Header icon='arrow'/>

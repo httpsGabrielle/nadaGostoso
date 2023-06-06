@@ -27,7 +27,7 @@ export default function Recipes() {
             <Header/>
             <View style={styles.container}>
                 {recipeList?.map((recipe, index) => (
-                    <TouchableOpacity style={styles.containerfood} onPress={()=>navigation.navigate('View')}>
+                    <TouchableOpacity style={styles.containerfood} onPress={()=>navigation.navigate('View', item)}>
                         <Image style={styles.img} source={require('../../assets/food.jpg')}/>
                         <View>
                             <Text style={styles.title}>{recipe.name}</Text>
