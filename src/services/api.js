@@ -15,7 +15,6 @@ export const getRecipes = async (token) => {
 };
 
 export const addRecipe = async (recipe, token) => {
-  console.log(recipe)
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -23,8 +22,6 @@ export const addRecipe = async (recipe, token) => {
   };
 
   const response = await axios.post(`${baseUrl}/recipes`, recipe, config);
-
-  console.log(response)
 
   return response.data;
 };
