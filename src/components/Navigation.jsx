@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { SafeAreaView } from 'react-native'
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -11,6 +10,7 @@ import NewRecipe from "../pages/NewRecipe";
 import ViewRecipe from "../pages/ViewRecipe";
 
 import { AuthContext } from "../contexts/AuthContext";
+import Header from "./Header";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,27 +32,33 @@ const AppStack = () => {
             options={{ headerShown: false }}
             component={SignIn}
           />
-        <Stack.Screen
-          name="SignUp"
-          options={{ headerShown: false }}
-          component={SignUp}
-        />
+          <Stack.Screen
+            name="SignUp"
+            options={{ headerShown: false }}
+            component={SignUp}
+          />
         </>
       ) : (
         <>
           <Stack.Screen
             name="Recipes"
-            options={{ headerShown: false }}
+            options={{
+              header: () => <Header />
+            }}
             component={Recipes}
           />
           <Stack.Screen
             name="addRecipe"
-            options={{ headerShown: false }}
+            options={{
+              header: () => <Header />
+            }}
             component={NewRecipe}
           />
           <Stack.Screen
             name="View"
-            options={{ headerShown: false }}
+            options={{
+              header: () => <Header />
+            }}
             component={ViewRecipe}
           />
         </>
@@ -60,6 +66,7 @@ const AppStack = () => {
     </Stack.Navigator>
   );
 }
+
 const Navigation = () => {
   return (
     <NavigationContainer>

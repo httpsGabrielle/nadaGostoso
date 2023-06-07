@@ -1,15 +1,31 @@
 import { useContext } from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { AuthContext } from "../contexts/AuthContext";
-import { colors, typography } from "../themes";
+import { colors } from "../themes";
 import { MaterialIcons } from '@expo/vector-icons'
 
 const Header = () => {
   const route = useRoute()
   const navigation = useNavigation()
+  const insets = useSafeAreaInsets()
   const { logout } = useContext(AuthContext)
+  
+  const styles = StyleSheet.create({
+    container: {
+      display: "flex",
+      flexDirection: 'row-reverse',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: "100%",
+      backgroundColor: colors.secondary,
+      paddingHorizontal: 16,
+      paddingTop: insets.top + 4,
+      paddingBottom: 16
+    }
+  })
 
   return (
     <View style={styles.container}>
@@ -31,25 +47,3 @@ const Header = () => {
 
 export default Header;
 
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flexDirection: 'row-reverse',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: "100%",
-    backgroundColor: colors.secondary,
-    padding: 20,
-  },
-  name: {
-    color: '#fff',
-    fontSize: typography.subTitle.size,
-    fontWeight: typography.subTitle.weight
-  },
-  icon: {
-    width: 24,
-    height: 24,
-    resizeMode: "contain",
-    padding: 8
-  },
-});

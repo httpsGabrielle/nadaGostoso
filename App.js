@@ -6,10 +6,10 @@ import Navigation from './src/components/Navigation'
 
 export default function App(){
   return (
-    <AuthProvider>
-      <SafeAreaProvider>
-        <Navigation />
+      <SafeAreaProvider style={{ flex: 1 }}>
+        <AuthProvider>
+          <Navigation />
+        </AuthProvider>
       </SafeAreaProvider>
-    </AuthProvider>
   )
 }

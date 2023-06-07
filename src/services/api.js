@@ -26,6 +26,18 @@ export const addRecipe = async (recipe, token) => {
   return response.data;
 };
 
+export const deleteRecipe = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.delete(`${baseUrl}/recipes/${id}`, config)
+
+  return response.data
+}
+
 export const signupApi = async ({ username, name, password }) => {
   const response = await axios.post(`${baseUrl}/users`, {
     username,

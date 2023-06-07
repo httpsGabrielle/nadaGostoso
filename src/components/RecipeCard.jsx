@@ -1,7 +1,6 @@
 import { TouchableOpacity, Image, View, Text, StyleSheet } from "react-native"
-import { MaterialIcons } from '@expo/vector-icons'; 
 
-import { colors, utilities } from "../themes"
+import { colors } from "../themes"
 
 const RecipeCard = ({ name, image, author, handlePress }) => {
   return (
@@ -13,15 +12,10 @@ const RecipeCard = ({ name, image, author, handlePress }) => {
         style={styles.img}
         source={{ uri: 'data:image/jpeg;base64,' + image }}
       />
-      <View>
+      <View style={styles.info}>
         <View>
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.author}>@{author}</Text>
-        </View>
-
-        <View>
-          <MaterialIcons name="edit" size={16} color={colors.warning} />
-          <MaterialIcons name="delete" size={16} color={utilities.danger} />
         </View>
       </View>
     </TouchableOpacity>
@@ -37,13 +31,20 @@ const styles = StyleSheet.create({
     padding: 16,
     display: 'flex',
     flexDirection: 'row',
-    marginVertical: 8,
+    marginVertical: 8
   },
   img: {
     width: 64,
     height: 64,
     borderRadius: 6,
     marginRight: 16,
+  },
+  info: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   title: {
     fontSize: 16,
@@ -56,5 +57,10 @@ const styles = StyleSheet.create({
     color: 'black',
     opacity: 0.5,
     marginTop: 8
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   }
 })

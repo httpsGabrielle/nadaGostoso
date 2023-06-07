@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext } from "react";
-import { StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
+import { StyleSheet, View, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { MaterialIcons } from '@expo/vector-icons'; 
 
@@ -8,12 +8,11 @@ import { AuthContext } from "../contexts/AuthContext";
 
 import { colors } from "../themes";
 
-import Header from "../components/Header";
 import RecipeCard from "../components/RecipeCard";
 
 const Recipes = () => {
   const [recipeList, setRecipeList] = useState([]);
-  const [loading, setLoading] = useState()
+  const [loading, setLoading] = useState(true)
 
   const { user } = useContext(AuthContext)
   const navigation = useNavigation();
@@ -30,33 +29,39 @@ const Recipes = () => {
       }
 
       fetchRecipes(user.token)
+      setLoading(false)
     }, [])
   )
 
-  return (
-    <>
-      <Header />
-      <View style={styles.container}>
-        <FlatList 
-          data={recipeList}
-          renderItem={({ item }) => (
-            <RecipeCard
-              key={item.id}
-              handlePress={() => navigation.navigate('View', item)}
-              name={item.name}
-              author={item.author.username}
-              image={item.image_base64}
-            />
-          )}
-        />
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={() => navigation.navigate("addRecipe")}
-        >
-          <MaterialIcons name="add" size={32} color="white" />
-        </TouchableOpacity>
+  if (loading) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" />
       </View>
-    </>
+    )
+  }
+
+  return (
+    <View style={styles.container}>
+      <FlatList 
+        data={recipeList}
+        renderItem={({ item }) => (
+          <RecipeCard
+            key={item.id}
+            handlePress={() => navigation.navigate('View', item)}
+            name={item.name}
+            author={item.author.username}
+            image={item.image_base64}
+          />
+        )}
+      />
+      <TouchableOpacity
+        style={styles.addBtn}
+        onPress={() => navigation.navigate("addRecipe")}
+      >
+        <MaterialIcons name="add" size={32} color="white" />
+      </TouchableOpacity>
+    </View>
   );
 }
 
