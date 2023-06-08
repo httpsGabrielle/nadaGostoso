@@ -8,7 +8,7 @@ import SignUp from "../pages/SignUp";
 import Recipes from "../pages/Recipes";
 import NewRecipe from "../pages/NewRecipe";
 import ViewRecipe from "../pages/ViewRecipe";
-
+import editRecipe from "../pages/EditRecipe";
 import { AuthContext } from "../contexts/AuthContext";
 import Header from "./Header";
 
@@ -60,6 +60,13 @@ const AppStack = () => {
               header: () => <Header />
             }}
             component={ViewRecipe}
+          />
+          <Stack.Screen
+            name="Edit"
+            options={{
+              header: () => <Header />
+            }}
+            component={editRecipe}
           />
         </>
       )}

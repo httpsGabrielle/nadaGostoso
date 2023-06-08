@@ -26,6 +26,18 @@ export const addRecipe = async (recipe, token) => {
   return response.data;
 };
 
+export const editRecipe = async (recipe, token, id) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(`${baseUrl}/recipes/${id}`, recipe, config);
+
+  return response.data;
+};
+
 export const deleteRecipe = async (id, token) => {
   const config = {
     headers: {
