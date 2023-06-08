@@ -6,6 +6,7 @@ import { login, signupApi } from "../services/api";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+  const [loading, setLoading] = useState(true)
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -17,11 +18,9 @@ const AuthProvider = ({ children }) => {
         await SecureStore.setItemAsync('nada_gostoso_token', JSON.stringify(user));
         setAuthenticated(true);
         setUser(user);
-        return user
       }
     } catch (err) {
       console.log(err)
-      return null
     }
   };
 
@@ -43,16 +42,15 @@ const AuthProvider = ({ children }) => {
       if (token) {
         setAuthenticated(true)
         setUser(token)
-        return token
       }
     } catch (err) {
       console.log(err)
-      return null
     }
   }
 
   const authContextValue = {
     authenticated,
+    loading,
     user,
     signin,
     signup,
@@ -67,6 +65,8 @@ const AuthProvider = ({ children }) => {
         setAuthenticated(true);
         setUser(token)
       }
+      
+      setLoading(false)
     };
 
     checkAuthentication();
