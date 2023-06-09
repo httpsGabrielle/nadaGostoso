@@ -66,6 +66,7 @@ const ViewRecipe = ({ route }) => {
           <View style={styles.options}>
             <TouchableOpacity
               style={styles.btn}
+              onPress={() => navigation.navigate('Edit', route.params)}
             >
               <MaterialIcons name="edit" size={32} color={utilities.warning} />
             </TouchableOpacity>
