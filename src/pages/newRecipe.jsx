@@ -7,12 +7,13 @@ import {
   TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Picker } from '@react-native-picker/picker'
+import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker'
 
 import { addRecipe } from "../services/api";
 import { AuthContext } from "../contexts/AuthContext";
 import { colors, typography } from "../themes";
+import IngredientInput from "../components/IngredientInput";
 
 const NewRecipe = () => {
   const [recipeName, setRecipeName] = useState("");
@@ -26,13 +27,12 @@ const NewRecipe = () => {
   const navigation = useNavigation();
   const { user } = useContext(AuthContext)
 
-  const measurements = {
-    un: 'Unidade',
-    xic: 'Xícara',
-    col: 'Colher',
-    ml: 'Mililitro',
-    lt: 'Litro',
-    gr: 'Grama'
+  const handleDeleteIngredient = (ingredient) => {
+    setIngredients(current => current.filter(obj => {
+       if (obj.name === ingredient.name && obj.quantity === ingredient.quantity && obj.measurement === ingredient.measurement) {
+        return false
+       } else return true
+    }))
   }
 
   const handleIngredientSubmit = () => {
@@ -94,39 +94,23 @@ const NewRecipe = () => {
         Ingredientes:
       </Text>
       {ingredients.map((ingredient, index) => (
-        <Text
-          key={index}
+        <View key={index} style={styles.ingredientCard}>
+        <Text>{`\u25CF ${ingredient.name} - ${ingredient.quantity} ${ingredient.measurement}`}</Text>
+        <TouchableOpacity
+          onPress={() => handleDeleteIngredient(ingredient)}
         >
-          {`\u25CF ${ingredient.name} - ${ingredient.quantity} ${ingredient.measurement}`}
-        </Text>
-      ))}
-      <View>
-        <TextInput
-          style={styles.input}
-          placeholder="Nome"
-          onChangeText={setIngredientName}
-          value={ingredientName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Quantidade"
-          onChangeText={setIngredientQuantity}
-          value={ingredientQuantity}
-          inputMode="numeric"
-        />
-        <Text>Unidade de medida:</Text>
-        <Picker
-          style={styles.input}
-          mode="dropdown"
-          prompt="Unidade de medida"
-          selectedValue={ingredientUnit}
-          onValueChange={(value) => setIngredientUnit(value)}
-        >
-          {Object.keys(measurements).map(unit => (
-            <Picker.Item key={unit} label={measurements[unit]} value={unit} />
-          ))}
-        </Picker>
+          <MaterialIcons name="delete" size={20} color={utilities.danger} />
+        </TouchableOpacity>
       </View>
+      ))}
+      <IngredientInput 
+        name={ingredientName}
+        handleName={setIngredientName}
+        quantity={ingredientQuantity}
+        handleQuantity={setIngredientQuantity}
+        unit={ingredientUnit}
+        handleUnit={setIngredientUnit}
+      />
       <TouchableOpacity 
         style={styles.btn} 
         onPress={handleIngredientSubmit}
@@ -197,4 +181,13 @@ const styles = StyleSheet.create({
     padding: 8,
     width: '100%'
   },
+  ingredientCard:{
+    width: '100%',
+    padding: 8,
+    marginBottom: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  }
 });
